@@ -129,10 +129,23 @@ namespace LubeLogger_Builder.Views
                     {
                         File.Delete(destFilePath);
                     }
+                    WriteToOutput($"Creating Zip File for {archCommand}");
                     ZipFile.CreateFromDirectory(archPath, destFilePath);
                     WriteToOutput($"Created Zip File: {Path.GetFileName(destFilePath)}");
+                    WriteToOutput($"Build Completed for {archCommand}");
+                } else
+                {
+                    WriteToOutput($"Error: Build Failed for {archCommand}");
                 }
             }
+            //clean up
+            WriteToOutput("Cleaning Up");
+            var releaseFolder = Path.Combine(buildParams.SourceFolder, "lubelog/bin/Release/net8.0/");
+            if (Directory.Exists(releaseFolder))
+            {
+                Directory.Delete(releaseFolder, true);
+            }
+            WriteToOutput("All Done");
         }
         private async Task RunBuildCommand(string buildCommand, string buildPath)
         {
