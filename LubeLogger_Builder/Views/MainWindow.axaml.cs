@@ -112,13 +112,17 @@ namespace LubeLogger_Builder.Views
                 return;
             }
             WriteToOutput($"RIDs to Build For: {string.Join(",", buildParams.TargetArchs)}");
-            var useBashExec = useBash.IsChecked ?? false;
-            var executableName = useBashExec ? "bash" : "cmd.exe";
+            var executableName = executableFile.SelectionBoxItem.ToString();
+            var commandTitle = "/c";
+            if (executableName != "cmd.exe")
+            {
+                commandTitle = "-c";
+            }
             //build for each arch
             foreach( var archCommand in buildParams.TargetArchs)
             {
                 var selfContainedCommand = buildParams.BuildSelfContained ? "--self-contained" : "";
-                var fullCommand = $"/c dotnet publish -r {archCommand} {selfContainedCommand}";
+                var fullCommand = $"{commandTitle} dotnet publish -r {archCommand} {selfContainedCommand}";
                 WriteToOutput($"Building for {archCommand}");
                 await RunBuildCommand(executableName, fullCommand, buildPath);
                 //check if folder exists.

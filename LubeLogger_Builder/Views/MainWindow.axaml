@@ -9,7 +9,7 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="LubeLogger Builder"
 		Width="620"
-		Height="580"
+		Height="590"
 		CanResize="false">
 
 	<Design.DataContext>
@@ -31,7 +31,12 @@
 			<CheckBox Name="buildLinuxCheck">Linux(linux-x64)</CheckBox>
 			<Label>Other Architecture(Enter RIDs separated by ,):</Label>
 			<TextBox Name="otherArch"/>
-			<CheckBox Name="useBash">Build on Mac/Linux</CheckBox>
+			<Label>Build Using:</Label>
+			<ComboBox Name="executableFile" SelectedIndex="0" MaxDropDownHeight="100">
+				<ComboBoxItem>cmd.exe</ComboBoxItem>
+				<ComboBoxItem>/bin/bash</ComboBoxItem>
+				<ComboBoxItem>zsh</ComboBoxItem>
+			</ComboBox>
 			<Label>Self Contained(or Framework-Dependent)</Label>
 			<CheckBox IsChecked="true" Name="buildSelfContained">Self-Contained</CheckBox>
 		</StackPanel>
