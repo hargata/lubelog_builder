@@ -21,5 +21,6 @@
 7. Select the target architecture, by default only Windows is selected
 8. Decide if you want to do a self-contained build(will allow the app to run on systems without installing .NET 8)
 9. Click Build
+10. The app will output a zip file containing the executable and all of the dependencies required to run on the targeted system.
 ## Dependencies
 - [Avalonia](https://github.com/avaloniaui/avalonia)
