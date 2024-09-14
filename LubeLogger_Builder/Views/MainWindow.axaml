@@ -9,7 +9,7 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="LubeLogger Builder"
 		Width="620"
-		Height="550"
+		Height="580"
 		CanResize="false">
 
 	<Design.DataContext>
@@ -27,10 +27,11 @@
 			</Grid>
 			<Label>Target Architecture:</Label>
 			<CheckBox IsChecked="true" Name="buildWindowsCheck">Windows(win-x64)</CheckBox>
-			<CheckBox Name="buildMacCheck">MacOS(osx-64)</CheckBox>
+			<CheckBox Name="buildMacCheck">MacOS(osx-x64)</CheckBox>
 			<CheckBox Name="buildLinuxCheck">Linux(linux-x64)</CheckBox>
 			<Label>Other Architecture(Enter RIDs separated by ,):</Label>
 			<TextBox Name="otherArch"/>
+			<CheckBox Name="useBash">Build on Mac/Linux</CheckBox>
 			<Label>Self Contained(or Framework-Dependent)</Label>
 			<CheckBox IsChecked="true" Name="buildSelfContained">Self-Contained</CheckBox>
 		</StackPanel>

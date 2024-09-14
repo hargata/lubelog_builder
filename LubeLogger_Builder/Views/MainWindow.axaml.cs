@@ -112,13 +112,15 @@ namespace LubeLogger_Builder.Views
                 return;
             }
             WriteToOutput($"RIDs to Build For: {string.Join(",", buildParams.TargetArchs)}");
+            var useBashExec = useBash.IsChecked ?? false;
+            var executableName = useBashExec ? "bash" : "cmd.exe";
             //build for each arch
             foreach( var archCommand in buildParams.TargetArchs)
             {
                 var selfContainedCommand = buildParams.BuildSelfContained ? "--self-contained" : "";
                 var fullCommand = $"/c dotnet publish -r {archCommand} {selfContainedCommand}";
                 WriteToOutput($"Building for {archCommand}");
-                await RunBuildCommand(fullCommand, buildPath);
+                await RunBuildCommand(executableName, fullCommand, buildPath);
                 //check if folder exists.
                 var archPath = Path.Combine(buildParams.SourceFolder, $"lubelog/bin/Release/net8.0/{archCommand}/publish");
                 if (Directory.Exists(archPath))
@@ -147,10 +149,10 @@ namespace LubeLogger_Builder.Views
             }
             WriteToOutput("All Done");
         }
-        private async Task RunBuildCommand(string buildCommand, string buildPath)
+        private async Task RunBuildCommand(string executableName, string buildCommand, string buildPath)
         {
             var p = new Process();
-            p.StartInfo.FileName = "cmd.exe";
+            p.StartInfo.FileName = executableName;
             p.StartInfo.Arguments = buildCommand;
             p.StartInfo.WorkingDirectory = buildPath;
             p.StartInfo.CreateNoWindow = true;
