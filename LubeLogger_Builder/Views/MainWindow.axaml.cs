@@ -82,11 +82,6 @@ namespace LubeLogger_Builder.Views
                 WriteToOutput($"Error: No Source Folder Selected!");
                 return;
             }
-            var buildPath = Path.Combine(buildParams.SourceFolder, "lubelog");
-            if (!Directory.Exists(buildPath))
-            {
-                WriteToOutput("Error: Invalid Build Path Selected, lubelog folder not found");
-            }
             var configPath = Path.Combine(buildParams.SourceFolder, "config");
             if (Directory.Exists(configPath))
             {
@@ -122,11 +117,19 @@ namespace LubeLogger_Builder.Views
             foreach( var archCommand in buildParams.TargetArchs)
             {
                 var selfContainedCommand = buildParams.BuildSelfContained ? "--self-contained" : "";
-                var fullCommand = $"{commandTitle} dotnet publish -r {archCommand} {selfContainedCommand}";
+                var fullCommand = $"{commandTitle} \"dotnet publish -r {archCommand} {selfContainedCommand}\" ";
                 WriteToOutput($"Building for {archCommand}");
-                await RunBuildCommand(executableName, fullCommand, buildPath);
+                try
+                {
+                    await RunBuildCommand(executableName, fullCommand, buildParams.SourceFolder);
+                }
+                catch (Exception ex)
+                {
+                    WriteToOutput($"Error: {ex.Message}");
+                    break;
+                }
                 //check if folder exists.
-                var archPath = Path.Combine(buildParams.SourceFolder, $"lubelog/bin/Release/net8.0/{archCommand}/publish");
+                var archPath = Path.Combine(buildParams.SourceFolder, $"bin/Release/net8.0/{archCommand}/publish");
                 if (Directory.Exists(archPath))
                 {
                     //make zip.
@@ -146,7 +149,7 @@ namespace LubeLogger_Builder.Views
             }
             //clean up
             WriteToOutput("Cleaning Up");
-            var releaseFolder = Path.Combine(buildParams.SourceFolder, "lubelog/bin/Release/net8.0/");
+            var releaseFolder = Path.Combine(buildParams.SourceFolder, "bin/Release/net8.0/");
             if (Directory.Exists(releaseFolder))
             {
                 Directory.Delete(releaseFolder, true);
