@@ -21,3 +21,5 @@
 7. Select the target architecture, by default only Windows is selected
 8. Decide if you want to do a self-contained build(will allow the app to run on systems without installing .NET 8)
 9. Click Build
+## Dependencies
+- [Avalonia](https://github.com/avaloniaui/avalonia)
