@@ -1,6 +1,6 @@
 # LubeLog Builder
 ## Cross Platform Compiler and Packager for LubeLogger
-![image](https://github.com/user-attachments/assets/70cd9004-693c-4c5b-b62d-f6a59a8f9ed5)
+![image](https://github.com/user-attachments/assets/908e8f98-f941-4c74-b286-f4a38c392605)
 ## Notes:
 - This is an internal tool that we have made public so that users can run LubeLogger on bare-metal(without Docker) outside of Windows.
 - This being an internal tool, considerations for the UI was not a priority.
