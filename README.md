@@ -9,7 +9,7 @@
 - No guarantees that the output will run on your system.
 - No support will be provided, use at your own risk.
 ## Pre-requisites
-- A machine with .NET 8 Installed(non-negotiable!)
+- A machine with .NET 8 SDK Installed(non-negotiable!)
 - Optional: Visual Studio 2022 or some other .NET C# IDE like Rider(Highly recommended but you can also do `dotnet build`)
 ## How to Use
 1. Download source code in the Release section
