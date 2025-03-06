@@ -12,5 +12,6 @@ namespace LubeLogger_Builder.Models
         public string SourceFolder { get; set; } = "";
         public List<string> TargetArchs { get; set;} = new List<string>();
         public bool BuildSelfContained { get; set; } = true;
+        public bool OpenOutputFolder { get; set; } = true;
     }
 }
