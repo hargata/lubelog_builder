@@ -37,6 +37,40 @@ namespace LubeLogger_Builder.Views
                 WriteToOutput($"Error: {ex.Message}");
             }
         }
+        public async void BrowseForFile(object source, RoutedEventArgs args)
+        {
+            var topLevel = TopLevel.GetTopLevel(this);
+            var zipFileType = new FilePickerFileType("ZIP Archives")
+            {
+                Patterns = new[] { "*.zip" },
+                AppleUniformTypeIdentifiers = new[] { "public.archive" },
+                MimeTypes = new[] { "application/zip" }
+            };
+            var selectedFile = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            {
+                Title = "Select LubeLogger Source Code Zip File",
+                AllowMultiple = false,
+                FileTypeFilter = new[] { zipFileType }
+            });
+            try
+            {
+                if (selectedFile.Any() && !string.IsNullOrWhiteSpace(selectedFile.First().Path.LocalPath))
+                {
+                    var filePath = selectedFile.First().Path.LocalPath;
+                    var folderUp = Path.GetDirectoryName(filePath);
+                    var folderName = Path.GetFileNameWithoutExtension(filePath);
+                    var targetFolder = Path.Combine(folderUp, "lubelog_builder");
+                    ZipFile.ExtractToDirectory(filePath, targetFolder);
+                    var targetPath = Path.Combine(targetFolder, folderName);
+                    sourcePath.Text = targetPath;
+                    WriteToOutput($"Selected Folder: {sourcePath.Text}");
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteToOutput($"Error: {ex.Message}");
+            }
+        }
         public void WriteToOutput(string message)
         {
             outputText.Text += $"{DateTime.Now}: {message}\r\n";
@@ -46,7 +80,8 @@ namespace LubeLogger_Builder.Views
             var buildParams = new BuildParams
             {
                 SourceFolder = sourcePath.Text ?? "",
-                BuildSelfContained = buildSelfContained.IsChecked ?? false
+                BuildSelfContained = buildSelfContained.IsChecked ?? false,
+                OpenOutputFolder = openOutputFolder.IsChecked ?? false
             };
             if (buildWindowsCheck.IsChecked ?? false)
             {
@@ -133,7 +168,12 @@ namespace LubeLogger_Builder.Views
                 if (Directory.Exists(archPath))
                 {
                     //make zip.
-                    var destFilePath = Path.Combine(buildParams.SourceFolder, $"LubeLogger_v{versionNumber}_{archCommand.Replace("-", "_")}.zip");
+                    var outputFolder = Path.Combine(buildParams.SourceFolder, "output");
+                    if (!Directory.Exists(outputFolder))
+                    {
+                        Directory.CreateDirectory(outputFolder);
+                    }
+                    var destFilePath = Path.Combine(outputFolder, $"LubeLogger_v{versionNumber}_{archCommand.Replace("-", "_")}.zip");
                     if (File.Exists(destFilePath))
                     {
                         File.Delete(destFilePath);
@@ -155,6 +195,16 @@ namespace LubeLogger_Builder.Views
                 Directory.Delete(releaseFolder, true);
             }
             WriteToOutput("All Done");
+            if (buildParams.OpenOutputFolder)
+            {
+                try
+                {
+                    await OpenFolder(executableName, commandTitle, Path.Combine(buildParams.SourceFolder, "output"));
+                } catch (Exception ex)
+                {
+                    WriteToOutput($"Error: Unable to open output folder - {ex.Message}");
+                }
+            }
         }
         private async Task RunBuildCommand(string executableName, string buildCommand, string buildPath)
         {
@@ -162,6 +212,28 @@ namespace LubeLogger_Builder.Views
             p.StartInfo.FileName = executableName;
             p.StartInfo.Arguments = buildCommand;
             p.StartInfo.WorkingDirectory = buildPath;
+            p.StartInfo.CreateNoWindow = true;
+            p.Start();
+            await p.WaitForExitAsync();
+        }
+         private async Task OpenFolder(string executableName, string commandTitle, string folderPath)
+        {
+            var command = $"{commandTitle} \"start {folderPath}\"";
+            switch (executableName)
+            {
+                case "zsh":
+                    command = $"{commandTitle} \"open {folderPath}\"";
+                    break;
+                case "/bin/bash":
+                    command = $"{commandTitle} \"xdg-open {folderPath}\"";
+                    break;
+                default:
+                    command = $"{commandTitle} \"start {folderPath}\"";
+                    break;
+            }
+            var p = new Process();
+            p.StartInfo.FileName = executableName;
+            p.StartInfo.Arguments = command;
             p.StartInfo.CreateNoWindow = true;
             p.Start();
             await p.WaitForExitAsync();
