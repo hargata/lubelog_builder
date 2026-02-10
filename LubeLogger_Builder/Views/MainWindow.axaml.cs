@@ -164,7 +164,7 @@ namespace LubeLogger_Builder.Views
                     break;
                 }
                 //check if folder exists.
-                var archPath = Path.Combine(buildParams.SourceFolder, $"bin/Release/net8.0/{archCommand}/publish");
+                var archPath = Path.Combine(buildParams.SourceFolder, $"bin/Release/net10.0/{archCommand}/publish");
                 if (Directory.Exists(archPath))
                 {
                     //make zip.
@@ -189,7 +189,7 @@ namespace LubeLogger_Builder.Views
             }
             //clean up
             WriteToOutput("Cleaning Up");
-            var releaseFolder = Path.Combine(buildParams.SourceFolder, "bin/Release/net8.0/");
+            var releaseFolder = Path.Combine(buildParams.SourceFolder, "bin/Release/net10.0/");
             if (Directory.Exists(releaseFolder))
             {
                 Directory.Delete(releaseFolder, true);
