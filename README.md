@@ -9,8 +9,8 @@
 - No guarantees that the output will run on your system.
 - No support will be provided, use at your own risk.
 ## Pre-requisites
-- A machine with .NET 8 SDK Installed(non-negotiable!)
-- Optional: Visual Studio 2022 or some other .NET C# IDE like Rider(Highly recommended but you can also do `dotnet build`)
+- A machine with .NET 10 SDK Installed(non-negotiable!)
+- Optional: Visual Studio 2026 or some other .NET C# IDE like Rider(Highly recommended but you can also do `dotnet build`)
 ## How to Use
 1. Download source code in the Release section
 2. Build the source code(either in VS or command line)
@@ -20,9 +20,9 @@
 6. Select the Source Code folder(the one you just extracted from the zip file)
 7. Select the target architecture, by default only Windows is selected
 8. If not building in Windows, make sure you use the right shell app to run the command
-9. Decide if you want to do a self-contained build(will allow the app to run on systems without installing .NET 8)
+9. Decide if you want to do a self-contained build(will allow the app to run on systems without installing .NET 10)
 10. Click Build
 11. The app will output a zip file containing the executable and all of the dependencies required to run on the targeted system.
 ## Dependencies
 - [Avalonia](https://github.com/avaloniaui/avalonia)
-- [.NET 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+- [.NET 10](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
