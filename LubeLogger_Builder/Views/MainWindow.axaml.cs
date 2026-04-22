@@ -60,8 +60,12 @@ namespace LubeLogger_Builder.Views
                     var folderUp = Path.GetDirectoryName(filePath);
                     var folderName = Path.GetFileNameWithoutExtension(filePath);
                     var targetFolder = Path.Combine(folderUp, "lubelog_builder");
-                    ZipFile.ExtractToDirectory(filePath, targetFolder);
                     var targetPath = Path.Combine(targetFolder, folderName);
+                    if (Directory.Exists(targetPath))
+                    {
+                        Directory.Delete(targetPath, true);
+                    }
+                    ZipFile.ExtractToDirectory(filePath, targetFolder);
                     sourcePath.Text = targetPath;
                     WriteToOutput($"Selected Folder: {sourcePath.Text}");
                 }
